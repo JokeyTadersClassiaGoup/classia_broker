@@ -10,7 +10,7 @@ class OtpPageCubit extends Cubit<OtpPageCubitState> {
 
   OtpPageCubit(this.verifyOtp) : super(OtpPageCubitState());
 
-  Future verfiySmsCode(VerifyOtpParams params) async {
+  Future verifySmsCode(VerifyOtpParams params) async {
     final response = await verifyOtp.call(params);
 
     if (response.isRight) {

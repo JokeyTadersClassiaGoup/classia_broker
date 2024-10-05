@@ -1,9 +1,10 @@
+import 'package:classia_broker/features/home/domain/model/broker_model.dart';
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/auth/domain/models/user_model.dart';
-
+import '../../features/order/1_domian/entity/order.dart';
 import '../error/failures.dart';
 
 abstract class UseCase<Type, Params> {
@@ -28,7 +29,6 @@ class LoginParams extends Params {
 
 class SignUpParams extends Params {
   final String? fullName;
-  final String? panNumber;
   final String phoneNumber;
   final String? email;
   final BuildContext context;
@@ -38,12 +38,11 @@ class SignUpParams extends Params {
     required this.phoneNumber,
     required this.context,
     this.fullName,
-    this.panNumber,
     this.email,
     required this.type,
   });
   @override
-  List<Object?> get props => [phoneNumber, context, fullName, panNumber, email];
+  List<Object?> get props => [phoneNumber, context, fullName, email];
 }
 
 class VerifyOtpParams extends Params {
@@ -65,7 +64,33 @@ class VerifyOtpParams extends Params {
   List<Object?> get props => [smsCode, userModel, context, verificationId];
 }
 
+class PlaceOrderParams extends Params {
+  final Order order;
+  final String accessToken;
 
+  PlaceOrderParams({required this.order, required this.accessToken});
+  @override
+  List<Object?> get props => [order, accessToken];
+}
+
+class ActivateBrokerParams extends Params {
+  final BrokerModel brokerModel;
+
+  ActivateBrokerParams({required this.brokerModel});
+
+  @override
+  List<Object?> get props => [brokerModel];
+}
+
+class GetBrokerIdParams extends Params {
+  final String accessToken;
+  final String uId;
+
+  GetBrokerIdParams({required this.accessToken, required this.uId});
+
+  @override
+  List<Object?> get props => [accessToken, uId];
+}
 // class WriteTradeHistoryParams extends Params {
 //   final TradeTransModel tradeTransModel;
 

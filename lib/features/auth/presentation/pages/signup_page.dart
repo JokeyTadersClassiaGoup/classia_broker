@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/common/widgets/company_logo.dart';
-
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/common/widgets/primary_button.dart';
 import '../../../../core/common/widgets/primary_text_field.dart';
@@ -19,7 +18,7 @@ import 'bloc/auth_cubit.dart';
 import 'bloc/auth_cubit_state.dart';
 
 class SignUpPage extends StatefulWidget {
-  static const routeName = '/signup-page';
+  static const routeName = 'signup-page';
   const SignUpPage({super.key});
 
   @override
@@ -28,13 +27,11 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final fullNameController = TextEditingController();
-  final panNumberController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   FocusNode fullNameNode = FocusNode();
-  FocusNode panNumberFocusNode = FocusNode();
   FocusNode phoneNumberNode = FocusNode();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordNode = FocusNode();
@@ -43,7 +40,6 @@ class _SignUpPageState extends State<SignUpPage> {
   void dispose() {
     super.dispose();
     emailController.dispose();
-    panNumberController.dispose();
     phoneNumberController.dispose();
     fullNameController.dispose();
     passwordController.dispose();
@@ -52,7 +48,6 @@ class _SignUpPageState extends State<SignUpPage> {
     // passwordNode.dispose();
     phoneNumberNode.dispose();
     emailFocusNode.dispose();
-    panNumberFocusNode.dispose();
   }
 
   @override
@@ -97,14 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     controller: fullNameController,
                     labelText: 'Full name',
                     focusNode: fullNameNode,
-                    nextFocusNode: panNumberFocusNode,
-                    obscureText: false,
-                  ),
-                  PrimaryTextField(
-                    controller: panNumberController,
-                    labelText: 'PAN number',
-                    focusNode: panNumberFocusNode,
-                    nextFocusNode: phoneNumberNode,
+                    nextFocusNode: emailFocusNode,
                     obscureText: false,
                   ),
                   PrimaryTextField(
@@ -144,7 +132,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             : PrimaryLoadingButton(
                                 onPressed: () async {
                                   if (fullNameController.text.isEmpty ||
-                                      panNumberController.text.isEmpty ||
                                       emailController.text.isEmpty ||
                                       phoneNumberController.text.isEmpty) {
                                     isOtpLoading.value = false;
@@ -159,8 +146,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                             context: context,
                                             fullName:
                                                 fullNameController.text.trim(),
-                                            panNumber:
-                                                panNumberController.text.trim(),
                                             email: emailController.text.trim(),
                                             type: 'signin',
                                           ),

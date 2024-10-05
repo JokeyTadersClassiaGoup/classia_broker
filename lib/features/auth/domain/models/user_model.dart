@@ -4,7 +4,6 @@ class UserModel extends User {
   UserModel({
     required super.uId,
     required super.fullName,
-    required super.panNumber,
     required super.email,
     required super.phoneNumber,
   });
@@ -13,7 +12,6 @@ class UserModel extends User {
     return UserModel(
       uId: map['uId'],
       fullName: map['fullName'],
-      panNumber: map['panNumber'],
       email: map['email'],
       phoneNumber: map['phoneNumber'],
     );
@@ -23,7 +21,6 @@ class UserModel extends User {
     return {
       'uId': id,
       'fullName': fullName,
-      'panNumber': panNumber,
       'email': email,
       'phoneNumber': phoneNumber,
     };

@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/common/widgets/company_logo.dart';
+import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/common/widgets/primary_button.dart';
 import '../../../../core/use_case/use_case.dart';
 import '../../../../core/utils/invest_amount.dart';
@@ -28,12 +28,11 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController phoneNumberController = TextEditingController();
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    isOtpLoading.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   isOtpLoading.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +76,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: const TextStyle(fontSize: 18, color: Colors.white),
                     decoration: InputDecoration(
                       prefix: const Text(
-                        '+91',
-                        style: TextStyle(color: Colors.white24),
+                        '+91 ',
+                        style: TextStyle(color: Colors.white),
                       ),
                       counterText: '',
                       label: const Text('Phone number'),

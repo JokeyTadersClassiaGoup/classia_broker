@@ -35,7 +35,7 @@ import 'otp_page_cubit_state.dart';
 // }
 
 class OtpVerificationPage extends StatelessWidget {
-  static const routeName = '/otp-verification-page';
+  static const routeName = 'otp-verification-page';
   final String verificationId;
   final UserModel? userModel;
   final String type;
@@ -96,7 +96,7 @@ class OtpVerificationPage extends StatelessWidget {
                     ),
                     onCompleted: (val) async {
                       isLoading.value = true;
-                      await ct.read<OtpPageCubit>().verfiySmsCode(
+                      await ct.read<OtpPageCubit>().verifySmsCode(
                             VerifyOtpParams(
                               userModel: userModel,
                               smsCode: val,

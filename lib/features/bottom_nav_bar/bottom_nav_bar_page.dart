@@ -1,33 +1,38 @@
+import 'package:classia_broker/features/level/presentation/level_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
 
-class BrokerBottomNavBar extends StatefulWidget {
-  final String accessToken;
+class BottomNavBarPage extends StatefulWidget {
+  static const routeName = '/bottom-navbar-page';
+  final StatefulNavigationShell navigationShell;
 
-  const BrokerBottomNavBar({
+  const BottomNavBarPage({
     super.key,
-    required this.accessToken,
+    required this.navigationShell,
   });
 
   @override
-  State<BrokerBottomNavBar> createState() => _BrokerBottomNavBarState();
+  State<BottomNavBarPage> createState() => _BottomNavBarPageState();
 }
 
-class _BrokerBottomNavBarState extends State<BrokerBottomNavBar> {
+class _BottomNavBarPageState extends State<BottomNavBarPage> {
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      // TradeOverviewPage(accessToken: widget.accessToken),
+      // HomePageProvider(accessToken: widget.accessToken),
+      LevelPage(),
+
       // const BrokerHomePage(),
       // const BrokerHistoryPageProvider(),
       // BrokerProfilePage(),
     ];
     return Scaffold(
-      body: screens.elementAt(currentIndex),
+      body: widget.navigationShell,
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: Colors.white12,
@@ -54,16 +59,16 @@ class _BrokerBottomNavBarState extends State<BrokerBottomNavBar> {
           //  labelBehavior: NavigationDestinationLabelBehavior.alwaysHide
         ),
         child: NavigationBar(
-          selectedIndex: currentIndex,
+          height: 70,
+          selectedIndex: widget.navigationShell.currentIndex,
           onDestinationSelected: (index) {
-            setState(() {
-              currentIndex = index;
-            });
+            widget.navigationShell.goBranch(index,
+                initialLocation: index == widget.navigationShell.currentIndex);
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.upload),
-              selectedIcon: Icon(Icons.upload_rounded),
+              icon: Icon(Icons.swap_horiz_outlined),
+              selectedIcon: Icon(Icons.swap_horiz_rounded),
               label: 'Trade',
             ),
             NavigationDestination(

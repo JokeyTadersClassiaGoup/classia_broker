@@ -1,3 +1,4 @@
+import 'package:classia_broker/features/auth/presentation/pages/upstox_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ abstract class AuthRemoteDataSourceInterface {
   Future<bool> editUser(UserModel userModel);
 }
 
+var collectionName = 'brokers';
+
 class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -59,7 +62,6 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
           UserModel userModel = UserModel(
             uId: '',
             fullName: params.fullName ?? '',
-            panNumber: params.panNumber ?? '',
             email: params.email ?? '',
             phoneNumber: params.phoneNumber,
           );
@@ -93,7 +95,6 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
     required String verificationId,
     required String type,
   }) async {
-    print('type $type');
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
@@ -103,7 +104,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
       print('user status ${userResult.additionalUserInfo!.isNewUser}');
       if (userModel != null && userResult.additionalUserInfo!.isNewUser) {
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection(collectionName)
             .doc(_auth.currentUser!.uid)
             .set(userModel.toMap(_auth.currentUser!.uid));
       } else if (!userResult.additionalUserInfo!.isNewUser &&
@@ -112,7 +113,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
         showWarningToast(msg: 'Account already exists.');
       }
       if (context.mounted) {
-        // context.pushReplacementNamed(BottomNavBarPage.routeName);
+        context.pushReplacementNamed(UpstoxLogin.routeName);
       }
       return true;
     } on FirebaseAuthException catch (e) {
@@ -126,8 +127,10 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   Future<UserModel> getUser(String id) async {
     try {
       print('getting user $id');
-      final docSnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(id).get();
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection(collectionName)
+          .doc(id)
+          .get();
       if (!docSnapshot.exists) {
         return Future.error('User not available');
       } else {
@@ -145,7 +148,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
     print('values to update ${userModel.toMap(userModel.uId)}');
     try {
       final docSnapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection(collectionName)
           .doc(userModel.uId)
           .get();
 
@@ -153,7 +156,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
         return Future.error('User not available');
       } else {
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection(collectionName)
             .doc(userModel.uId)
             .update(userModel.toMap(_auth.currentUser!.uid));
         return true;
