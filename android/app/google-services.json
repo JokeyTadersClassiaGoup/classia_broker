@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "532486920518",
+    "project_id": "classia-trading",
+    "storage_bucket": "classia-trading.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532486920518:android:20d5ae2a257a0e78032d47",
+        "android_client_info": {
+          "package_name": "com.example.classia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1N99gbnlaHncVAzg4Wl88Z_6Pog4et90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532486920518:android:24d3589d45784bee032d47",
+        "android_client_info": {
+          "package_name": "com.example.classia_broker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1N99gbnlaHncVAzg4Wl88Z_6Pog4et90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532486920518:android:08e6ab055660b42e032d47",
+        "android_client_info": {
+          "package_name": "com.example.classia_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1N99gbnlaHncVAzg4Wl88Z_6Pog4et90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
