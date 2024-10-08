@@ -17,7 +17,7 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repository/auth_repository.dart';
 import 'features/order/1_domian/repository/order_repository.dart';
 
-const String accesssToken =
+const String accessken =
     'eyJ0eXAiOiJKV1QiLCJrZXlfaWQiOiJza192MS4wIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiI4NEFHOU4iLCJqdGkiOiI2NmZlNjdmMmFiOGNiYzI1MmFlOGQwMGIiLCJpc011bHRpQ2xpZW50IjpmYWxzZSwiaWF0IjoxNzI3OTQ4Nzg2LCJpc3MiOiJ1ZGFwaS1nYXRld2F5LXNlcnZpY2UiLCJleHAiOjE3Mjc5OTI4MDB9._s2pWl0AyfR3K4iIhHPZLAjUtHl_YJ__f4Cuukuh3EI';
 
 void main() async {

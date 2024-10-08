@@ -89,22 +89,18 @@ class HomePageCubit extends Cubit<HomeCubitState> {
     }
   }
 
-  Future<BrokerModel> getBroker(String accessToken) async {
-    emit(HomePageLoadingState());
-
+  Future<BrokerModel?> getBroker(String accessToken) async {
     final uId = FirebaseAuth.instance.currentUser!.uid;
 
     final response = await getBrokerById
         .call(GetBrokerIdParams(accessToken: accessToken, uId: uId));
 
     if (response.isRight) {
-      emit(HomePageLoadedState(instruments: response.right.lots));
-
       return response.right;
     } else {
-      // showWarningToast(msg: response.left.message);
-      emit(HomePageErrorState(message: response.left.message));
-      return Future.error(response.left.message);
+      print('mesg33 ${response.left.message}');
+      showWarningToast(msg: response.left.message);
     }
+    return null;
   }
 }

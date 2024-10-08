@@ -59,7 +59,7 @@ dependencies:
   phonepe_payment_sdk: ^2.0.3
   crypto: ^3.0.5
   webview_flutter: ^4.8.0
-  flutter_typeahead: ^5.2.0
+  flutter_typeahead: ^4.8.0
   jumping_dot: ^0.0.7
 
   
@@ -146,9 +146,9 @@ flutter_native_splash:
   web: true
   image: assets/splash-2.png
   color: "#FFD700"
-  android_12:
-    image: assets/splash-2.png
-    color: "#FFD700"
+  # android_12:
+  #   image: assets/splash-2.png
+  #   color: "#FFD700"
   # fonts:
   #   - family: Schyler
   #     fonts:

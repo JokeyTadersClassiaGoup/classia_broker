@@ -5,12 +5,12 @@ import 'package:either_dart/src/either.dart';
 
 import '../model/broker_model.dart';
 
-class GetBrokerById extends UseCase<BrokerModel, GetBrokerIdParams> {
+class GetBrokerById extends UseCase<BrokerModel?, GetBrokerIdParams> {
   final HomeRepository homeRepository;
 
   GetBrokerById({required this.homeRepository});
   @override
-  Future<Either<Failures, BrokerModel>> call(GetBrokerIdParams params) async {
+  Future<Either<Failures, BrokerModel?>> call(GetBrokerIdParams params) async {
     return await homeRepository.getBrokerById(params.uId, params.accessToken);
   }
 }

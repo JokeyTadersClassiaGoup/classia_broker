@@ -17,7 +17,7 @@ abstract class HomeRepository {
 
   Future<Either<Failures, bool>> stopBroker(String brokerUid);
 
-  Future<Either<Failures, BrokerModel>> getBrokerById(
+  Future<Either<Failures, BrokerModel?>> getBrokerById(
     String uid,
     String accessToken,
   );

@@ -3,7 +3,6 @@ import 'package:classia_broker/features/home/data/datasource/home_datasource.dar
 import 'package:classia_broker/features/home/domain/model/broker_model.dart';
 import 'package:classia_broker/features/home/domain/repository/home_repository.dart';
 import 'package:either_dart/src/either.dart';
-import 'package:flutter/material.dart';
 
 import '../../../../core/common/entity/ltp.dart';
 import '../../../../core/utils/show_warning_toast.dart';
@@ -20,8 +19,7 @@ class HomeRepositoryImpl extends HomeRepository {
       showWarningToast(msg: 'Instrument already exists');
     } else {
       portfolioInstruments.add(instrument);
-      print('len ${portfolioInstruments.length}');
-      showWarningToast(msg: 'Instrument added', color: Colors.green);
+      showWarningToast(msg: 'Instrument added');
     }
   }
 
@@ -35,7 +33,6 @@ class HomeRepositoryImpl extends HomeRepository {
 
     Ltp? existingInstrument = portfolioInstruments[existingInstrumentIndex];
     portfolioInstruments.removeAt(existingInstrumentIndex);
-    showWarningToast(msg: 'Instrument removed successfully');
   }
 
   @override
@@ -76,12 +73,13 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<Either<Failures, BrokerModel>> getBrokerById(
+  Future<Either<Failures, BrokerModel?>> getBrokerById(
       String uid, String accessToken) async {
     try {
       final response =
           await remoteDataSourceInterface.getBrokerById(uid, accessToken);
-      if (response.lots.isNotEmpty) {
+      if (response != null && response.lots.isNotEmpty) {
+        print('items found ${response.lots.map((inst) => inst.toMap())}');
         portfolioInstruments = response.lots;
       }
       return Right(response);

@@ -1,19 +1,26 @@
 import 'dart:convert';
 
-import 'package:classia_broker/core/theme/app_colors.dart';
+import 'package:classia_broker/core/utils/show_warning_toast.dart';
 import 'package:classia_broker/features/home/presentation/bloc/home_cubit.dart';
-import 'package:classia_broker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../../../core/common/entity/ltp.dart';
+import '../../../core/theme/app_colors.dart';
 
 class CompanySearchBar extends StatefulWidget {
   final BuildContext cubitContext;
   final Function(int totalValue) totalValFun;
-  const CompanySearchBar(
-      {super.key, required this.cubitContext, required this.totalValFun});
+  final String accessToken;
+  final bool isActivate;
+  const CompanySearchBar({
+    super.key,
+    required this.cubitContext,
+    required this.totalValFun,
+    required this.accessToken,
+    required this.isActivate,
+  });
 
   @override
   State<CompanySearchBar> createState() => _CompanySearchBarState();
@@ -43,7 +50,10 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
 
   @override
   void initState() {
+    print('se init00');
+
     super.initState();
+
     instruments = (json.decode(jsonData) as List).map((data) {
       return Ltp(
         instrumentKey: data['instrument_key'],
@@ -69,46 +79,49 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
         height: 50,
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(vertical: 5.0),
-        child: TypeAheadField(
-          suggestionsCallback: (instrument) {
+        child: TypeAheadField<Ltp>(
+          suggestionsCallback: (search) {
             return instruments
                 .where(
                   (item) => item.instrumentName.toLowerCase().contains(
-                        instrument.toLowerCase(),
+                        search.toLowerCase(),
                       ),
                 )
                 .toList();
           },
-          builder: (context, searchController, focusNode) {
-            return TextField(
-              controller: searchController,
-              autofocus: false,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Search company...',
-                suffixIcon: searchController.text.isEmpty
-                    ? Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      )
-                    : IconButton(
-                        onPressed: () {
-                          searchController.clear();
-                          // setState(() {});
-                        },
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
+          textFieldConfiguration: TextFieldConfiguration(
+            style: TextStyle(color: Colors.white),
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.characters,
+            controller: searchController,
+            decoration: InputDecoration(
+              hintText: 'Search company...',
+              suffixIcon: searchController.text.isEmpty
+                  ? Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        searchController.clear();
+                        setState(() {});
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        color: Colors.white,
                       ),
-                hintStyle: const TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
+                    ),
+              hintStyle: const TextStyle(color: Colors.grey),
+              border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                ),
-              ),
-            );
-          },
-          itemBuilder: (context, instrument) {
+                  borderSide: BorderSide(color: Colors.white70)),
+            ),
+          ),
+          suggestionsBoxDecoration: SuggestionsBoxDecoration(
+            color: AppColors.primaryColor,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          itemBuilder: (_, instrument) {
             return ListTile(
               tileColor: AppColors.primaryColor,
               title: Text(
@@ -119,23 +132,106 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
                 color: Colors.white,
                 style: IconButton.styleFrom(backgroundColor: Colors.white10),
                 onPressed: () async {
-                  cubit.addInstrument(instrument);
-                  final val =
-                      await cubit.getSelectedInstrumentLtp(accesssToken);
-                  widget.totalValFun(val);
+                  if (widget.isActivate) {
+                    showWarningToast(
+                        msg:
+                            'Your activate, you can\'t add/remove when activate');
+                  } else {
+                    cubit.addInstrument(instrument);
+                    final val = await cubit
+                        .getSelectedInstrumentLtp(widget.accessToken);
+                    widget.totalValFun(val);
+                  }
                 },
                 icon: const Icon(Icons.add),
                 focusColor: Colors.white,
               ),
             );
           },
-          onSelected: (city) {},
-          itemSeparatorBuilder: (context, index) => const Divider(
-            color: Colors.white24,
-            thickness: 0.5,
-            height: 0.6,
-          ),
+          onSuggestionSelected: (city) {},
         )
+        // TypeAheadField<Ltp>(
+        //   decorationBuilder: (context, child) {
+        //     return Material(
+        //       type: MaterialType.card,
+        //       elevation: 4,
+        //       borderRadius: BorderRadius.circular(8),
+        //       child: child,
+        //     );
+        //   },
+        //   suggestionsCallback: (instrument) {
+        //     print('got in $instrument');
+        //     setState(() {});
+        //     return instruments
+        //         .where(
+        //           (item) => item.instrumentName.toLowerCase().contains(
+        //                 instrument.toLowerCase(),
+        //               ),
+        //         )
+        //         .toList();
+        //   },
+        //   builder: (context, searchController, focusNode) {
+        //     return TextField(
+        //       controller: searchController,
+        //       autofocus: false,
+        //       onChanged: (v) {
+        //         setState(() {});
+        //       },
+        //       style: TextStyle(color: Colors.white),
+        //       decoration: InputDecoration(
+        //         hintText: 'Search company...',
+        //         suffixIcon: searchController.text.isEmpty
+        //             ? Icon(
+        //                 Icons.search,
+        //                 color: Colors.grey,
+        //               )
+        //             : IconButton(
+        //                 onPressed: () {
+        //                   searchController.clear();
+        //                   setState(() {});
+        //                 },
+        //                 icon: Icon(
+        //                   Icons.close,
+        //                   color: Colors.white,
+        //                 ),
+        //               ),
+        //         hintStyle: const TextStyle(color: Colors.grey),
+        //         border: OutlineInputBorder(
+        //           borderRadius: BorderRadius.circular(30.0),
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   itemBuilder: (context, instrument) {
+        //     print('int');
+        //     return ListTile(
+        //       tileColor: AppColors.primaryColor,
+        //       title: Text(
+        //         instrument.instrumentName,
+        //         style: const TextStyle(color: Colors.white, fontSize: 14),
+        //       ),
+        //       trailing: IconButton(
+        //         color: Colors.white,
+        //         style: IconButton.styleFrom(backgroundColor: Colors.white10),
+        //         onPressed: () async {
+        //           cubit.addInstrument(instrument);
+        //           final val =
+        //               await cubit.getSelectedInstrumentLtp(accesssToken);
+        //           widget.totalValFun(val);
+        //         },
+        //         icon: const Icon(Icons.add),
+        //         focusColor: Colors.white,
+        //       ),
+        //     );
+        //   },
+
+        //   onSelected: (city) {},
+        //   itemSeparatorBuilder: (context, index) => const Divider(
+        //     color: Colors.white24,
+        //     thickness: 0.5,
+        //     height: 0.6,
+        //   ),
+        // )
 
         //  TypeAheadField<Ltp>(
         //   textFieldConfiguration: TextFieldConfiguration(

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../core/use_case/use_case.dart';
@@ -116,24 +114,26 @@ class OtpVerificationPage extends StatelessWidget {
                           ? const CircularProgressIndicator.adaptive(
                               backgroundColor: Colors.white,
                             )
-                          : TextButton(
-                              onPressed: () {
-                                showToast('OTP sent successfully',
-                                    position: ToastPosition.bottom,
-                                    radius: 30,
-                                    textPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    textStyle: GoogleFonts.poppins(
-                                        fontSize: 16, color: Colors.white));
-                              },
-                              child: const Text(
-                                "Resend OTP",
-                                style: TextStyle(
-                                    color: Color(0xffFFDAB9),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            );
+                          : SizedBox();
+
+                      //  TextButton(
+                      //     onPressed: () {
+                      //       showToast('OTP sent successfully',
+                      //           position: ToastPosition.bottom,
+                      //           radius: 30,
+                      //           textPadding: const EdgeInsets.symmetric(
+                      //               horizontal: 16, vertical: 10),
+                      //           textStyle: GoogleFonts.poppins(
+                      //               fontSize: 16, color: Colors.white));
+                      //     },
+                      //     child: const Text(
+                      //       "Resend OTP",
+                      //       style: TextStyle(
+                      //           color: Color(0xffFFDAB9),
+                      //           fontSize: 15,
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //   );
                     }),
               ],
             );

@@ -122,7 +122,7 @@ class _InstrumentDetailsPageState extends State<InstrumentDetailsPage> {
     if (isInit) {
       await getInstrumentDetails();
       timer = Timer.periodic(
-        const Duration(seconds: 5),
+        const Duration(seconds: 4),
         (time) async {
           await getLastTradePrice();
         },

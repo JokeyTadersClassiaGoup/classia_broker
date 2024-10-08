@@ -112,6 +112,13 @@ class _LevelPageState extends State<LevelPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Level'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                isUserAvailable();
+              },
+              icon: Icon(Icons.refresh))
+        ],
       ),
       body: ValueListenableBuilder(
           valueListenable: isTableLoading,
@@ -157,6 +164,11 @@ class _LevelPageState extends State<LevelPage> {
                                   style: const TextStyle(color: Colors.white54),
                                 ),
                               ),
+                              Divider(
+                                color: Colors.white,
+                                indent: 10,
+                                endIndent: 10,
+                              ),
                               const Text(
                                 'Past performance',
                                 style: TextStyle(
@@ -168,28 +180,41 @@ class _LevelPageState extends State<LevelPage> {
                                     color: Colors.amber, fontSize: 16),
                                 dataTextStyle:
                                     const TextStyle(color: Colors.white),
-                                columns: const <DataColumn>[
+                                columns: <DataColumn>[
                                   DataColumn(
                                       headingRowAlignment:
                                           MainAxisAlignment.center,
                                       label: Text('Date')),
                                   DataColumn(
                                       // headingRowAlignment: MainAxisAlignment.spaceEvenly,
-
-                                      label: Text('Prediction')),
-                                  DataColumn(label: Text('Achieved'))
+                                      label: Container(
+                                          // width: 100.w,
+                                          alignment: Alignment.center,
+                                          child: const Text('Prediction'))),
+                                  DataColumn(
+                                    label: Container(
+                                      // color: Colors.white24,
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text('Achived'),
+                                    ),
+                                  )
                                 ],
                                 rows: List.generate(pastPerformance!.length,
                                     (index) {
                                   final pred = pastPerformance![index];
                                   final date =
                                       DateFormat.yMd().format(pred.dateTime);
-                                  return DataRow(cells: <DataCell>[
-                                    DataCell(Text(date)),
-                                    DataCell(
-                                        Text(pred.predictionValue.toString())),
-                                    DataCell(Text(pred.achived.toString()))
-                                  ]);
+                                  return DataRow(
+                                    cells: <DataCell>[
+                                      DataCell(Text(date)),
+                                      DataCell(Center(
+                                          child: Text(pred.predictionValue
+                                              .toString()))),
+                                      DataCell(Align(
+                                          alignment: Alignment.center,
+                                          child: Text(pred.achived.toString())))
+                                    ],
+                                  );
                                 }),
                               )
                             ],

@@ -20,9 +20,9 @@ abstract class HomeRemoteDatasourceInterface {
 
   Future<bool> stopBroker({required String brokerUid});
 
-  Future<BrokerModel> getBrokerById(String uid, String accessToken);
+  Future<BrokerModel?> getBrokerById(String uid, String accessToken);
 
-  Future<bool> checkBrokerStatus(String uid);
+  // Future<bool> checkBrokerStatus(String uid);
 }
 
 class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
@@ -113,7 +113,7 @@ class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
   }
 
   @override
-  Future<BrokerModel> getBrokerById(String uid, String accessToken) async {
+  Future<BrokerModel?> getBrokerById(String uid, String accessToken) async {
     final user = FirebaseAuth.instance.currentUser;
     BrokerModel? broker;
     if (user == null) {
@@ -126,7 +126,7 @@ class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
           .doc(userId)
           .get();
 
-     
+      if (docSnapshot.exists) {
         var data = docSnapshot.data() as Map<String, dynamic>;
         broker = BrokerModel.fromMap(data);
         // selectedInstru = jokey!.lots;
@@ -136,24 +136,23 @@ class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
             .update({
           'at': accessToken,
         });
-        return broker;
-     
+      }
+      return broker;
     } catch (e) {
       rethrow;
     }
   }
 
-  @override
-  Future<bool> checkBrokerStatus(String uid) async {
-    try {
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('Active-Jokies')
-          .doc(uid)
-          .get();
-      return docSnapshot.exists;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
+  // @override
+  // Future<bool> checkBrokerStatus(String uid) async {
+  //   try {
+  //     final docSnapshot = await FirebaseFirestore.instance
+  //         .collection('Active-Jokies')
+  //         .doc(uid)
+  //         .get();
+  //     return docSnapshot.exists;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }

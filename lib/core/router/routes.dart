@@ -7,6 +7,7 @@ import 'package:classia_broker/features/level/presentation/upcoming_page.dart';
 import 'package:classia_broker/features/order/1_domian/entity/order_page_args.dart';
 import 'package:classia_broker/features/order/2_presentation/order_page.dart';
 import 'package:classia_broker/features/otp/presentation/bloc/otp_verification_page.dart';
+import 'package:classia_broker/features/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,6 +47,17 @@ final route = GoRouter(
               builder: (context, state) => const LevelPage(),
             ),
           ]),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: ProfilePage.routeName,
+                name: ProfilePage.routeName,
+                builder: (context, state) {
+                  return ProfilePage();
+                },
+              ),
+            ],
+          ),
         ],
       ),
       GoRoute(

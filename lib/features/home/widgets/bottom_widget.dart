@@ -37,8 +37,11 @@ class BottomWidget extends StatefulWidget {
 
 class _BottomWidgetState extends State<BottomWidget> {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
+  ValueNotifier<bool> isUpside = ValueNotifier(false);
 
   final auth = FirebaseAuth.instance;
+
+  var statusColor = AppColors.goldColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,38 +50,49 @@ class _BottomWidgetState extends State<BottomWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         widget.isActivate
-            ? ExpansionTile(
-                trailing: const Icon(
-                  Icons.keyboard_arrow_up_rounded,
-                  size: 35,
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
+            ? ValueListenableBuilder(
+                valueListenable: isUpside,
+                builder: (_, val, child) {
+                  return ExpansionTile(
+                    onExpansionChanged: (direction) {
+                      isUpside.value = direction;
+                    },
+                    trailing: Icon(
+                      isUpside.value
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_up_rounded,
+                      size: 35,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(radius),
-                        topRight: Radius.circular(radius))),
-                collapsedBackgroundColor: AppColors.primaryColor,
-                backgroundColor: AppColors.primaryColor,
-                collapsedIconColor: Colors.white,
-                // trailing: Icon(Icons.keyboard_double_arrow_up_rounded, color: Colors.white,),
-                title: const Text(
-                  'My status',
-                  style: TextStyle(color: Colors.white),
-                ),
-                iconColor: Colors.white,
-                children: [
-                  // const RecentWidget(),
-                  const Gap(5),
-                  ContainerSlider(
-                    accessToken: widget.accessToken,
-                    lotValue: widget.totalValue.value.floor(),
-                    lots: widget.instruments,
-                  )
-                ],
-              )
+                        topRight: Radius.circular(radius),
+                      ),
+                    ),
+                    collapsedBackgroundColor: AppColors.primaryColor,
+                    backgroundColor: AppColors.primaryColor,
+                    collapsedIconColor: Colors.white,
+                    // trailing: Icon(Icons.keyboard_double_arrow_up_rounded, color: Colors.white,),
+                    title: const Text(
+                      'My status',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    iconColor: Colors.white,
+                    children: [
+                      // const RecentWidget(),
+                      const Gap(5),
+                      ContainerSlider(
+                        accessToken: widget.accessToken,
+                        lotValue: widget.totalValue.value.floor(),
+                        lots: widget.instruments,
+                      )
+                    ],
+                  );
+                })
             : const SizedBox(),
         Container(
           color: AppColors.primaryColor,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -102,7 +116,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                           )
                         : TextButton(
                             style: TextButton.styleFrom(
-                              foregroundColor: AppColors.goldColor,
+                              foregroundColor: statusColor,
                               textStyle: GoogleFonts.poppins(
                                   fontSize: 15, fontWeight: FontWeight.w500),
                             ),
@@ -140,7 +154,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                                 setState(() {});
                               } else {
                                 showWarningToast(
-                                    msg: 'Select atlest 1 instrument');
+                                    msg: 'Select atleast 1 instrument');
                               }
                             },
                             child: widget.isActivate

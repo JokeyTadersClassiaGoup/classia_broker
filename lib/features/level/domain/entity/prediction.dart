@@ -1,4 +1,3 @@
-
 class Prediction {
   // final int lotValue;
   final double predictionValue;

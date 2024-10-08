@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="classia_broker"
+        android:label="Classia Broker"
         android:name="${applicationName}"
         android:icon="@mipmap/jticon">
         <activity

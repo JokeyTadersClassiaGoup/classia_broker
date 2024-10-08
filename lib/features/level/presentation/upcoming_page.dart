@@ -1,3 +1,5 @@
+import 'package:classia_broker/core/utils/show_warning_toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equal_space/equal_space.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,24 @@ class _UploadPredictionPageState extends State<UploadPredictionPage> {
 
   final TextEditingController predictionTextController =
       TextEditingController();
+  Future<void> postPrediction(Prediction prediction) async {
+    isLoading.value = true;
+
+    try {
+      final response = await FirebaseFirestore.instance
+          .collection('Broker')
+          .doc(prediction.jokeyUid)
+          .collection('upcoming-prediction')
+          .doc(prediction.predictionId)
+          .set(prediction.toMap())
+          .then((val) => true);
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+
+      showWarningToast(msg: e.toString());
+    }
+  }
 
   @override
   void dispose() {
@@ -125,19 +145,17 @@ class _UploadPredictionPageState extends State<UploadPredictionPage> {
                               dateTime: DateTime.now(),
                               predictionId: PredictionId().value,
                               jokeyUid: auth.currentUser!.uid,
-                              achived: 10.0,
+                              achived: 0.0,
                               title: titleController.text,
                               note: 'o',
                             );
-                            isLoading.value = true;
-                            // await cubit.uploadPrediction(prediction);
+                            await postPrediction(prediction);
                             // Workmanager().registerOneOffTask(
                             //   'testtask',
                             //   'printWithTime',
                             //   // initialDelay: Duration(seconds: 30),
                             // );
                             context.pop();
-                            isLoading.value = false;
                           },
                           child: const Text('Post'),
                         ),

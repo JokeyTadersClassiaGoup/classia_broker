@@ -53,13 +53,13 @@ class _ContainerSliderState extends State<ContainerSlider> {
     print('pr $performance');
 
     double minWidth = 0;
-    double maxWidth = MediaQuery.of(context).size.width;
+    double maxWidth = context.mounted ? MediaQuery.of(context).size.width : 0.0;
     var highValue = widget.lotValue * 2;
     statusColor = performance! < 0 ? Colors.red : Colors.green;
     symbol = performance! < 0 ? '-' : '+';
     currentWidth =
         minWidth + (liveValue - 0) / (highValue - 0) * (maxWidth - minWidth);
-    print('cw $currentWidth');
+    // print('cw $currentWidth');
     setState(() {});
   }
 
@@ -91,7 +91,7 @@ class _ContainerSliderState extends State<ContainerSlider> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (isInit) {
+    if (isInit && context.mounted) {
       timer = Timer.periodic(const Duration(seconds: 4), (v) async {
         await calculateWidth();
       });

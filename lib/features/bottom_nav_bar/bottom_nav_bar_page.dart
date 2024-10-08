@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../profile/profile_page.dart';
 
 class BottomNavBarPage extends StatefulWidget {
   static const routeName = '/bottom-navbar-page';
@@ -26,7 +27,7 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
     final List<Widget> screens = [
       // HomePageProvider(accessToken: widget.accessToken),
       const LevelPage(),
-
+      ProfilePage()
       // const BrokerHomePage(),
       // const BrokerHistoryPageProvider(),
       // BrokerProfilePage(),
@@ -76,11 +77,11 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
               icon: Icon(Icons.trending_up_rounded),
               label: 'Level',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.account_balance_wallet_outlined),
-              selectedIcon: Icon(Icons.account_balance_wallet),
-              label: 'Wallet',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.account_balance_wallet_outlined),
+            //   selectedIcon: Icon(Icons.account_balance_wallet),
+            //   label: 'Wallet',
+            // ),
             NavigationDestination(
               icon: Icon(CupertinoIcons.person_crop_circle),
               selectedIcon: Icon(CupertinoIcons.person_crop_circle_fill),
