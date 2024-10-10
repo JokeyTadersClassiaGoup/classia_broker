@@ -10,11 +10,11 @@ class VerifyOtp extends UseCase<bool, VerifyOtpParams> {
   @override
   Future<Either<Failures, bool>> call(VerifyOtpParams params) async {
     return await authRepository.verifyOtp(
-      userModel: params.userModel,
+      // userModel: params.userModel,
       context: params.context,
       verificationId: params.verificationId,
       smsCode: params.smsCode,
-      type: params.type,
+      // type: params.type,
     );
   }
 }

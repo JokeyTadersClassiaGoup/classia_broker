@@ -20,10 +20,10 @@ abstract class AuthRemoteDataSourceInterface {
 
   Future<bool> verifyOtp({
     required String smsCode,
-    UserModel? userModel,
+    // UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    required String type,
+    // required String type,
   });
 
   Future<UserModel> getUser(String id);
@@ -59,19 +59,18 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
           showWarningToast(msg: e.message!);
         },
         codeSent: (((verificationId, forceResendingToken) async {
-          UserModel userModel = UserModel(
-            uId: '',
-            fullName: params.fullName ?? '',
-            email: params.email ?? '',
-            phoneNumber: params.phoneNumber,
-          );
+          // UserModel userModel = UserModel(
+          //   uId: '',
+          //   fullName: params.fullName ?? '',
+          //   email: params.email ?? '',
+          //   phoneNumber: params.phoneNumber,
+          // );
           isOtpLoading.value = false;
 
           context.pushNamed(
             OtpVerificationPage.routeName,
             extra: {
               'verificationId': verificationId,
-              'userModel': userModel,
               'type': type,
             },
           );
@@ -90,10 +89,10 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   @override
   Future<bool> verifyOtp({
     required String smsCode,
-    UserModel? userModel,
+    // UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    required String type,
+    // required String type,
   }) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -101,17 +100,16 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
         smsCode: smsCode,
       );
       UserCredential userResult = await _auth.signInWithCredential(credential);
-      print('user status ${userResult.additionalUserInfo!.isNewUser}');
-      if (userModel != null && userResult.additionalUserInfo!.isNewUser) {
-        await FirebaseFirestore.instance
-            .collection(collectionName)
-            .doc(_auth.currentUser!.uid)
-            .set(userModel.toMap(_auth.currentUser!.uid));
-      } else if (!userResult.additionalUserInfo!.isNewUser &&
-          type == 'signin') {
-        print('type $type');
-        showWarningToast(msg: 'Account already exists.');
-      }
+      // if (userModel != null && userResult.additionalUserInfo!.isNewUser) {
+      //   await FirebaseFirestore.instance
+      //       .collection(collectionName)
+      //       .doc(_auth.currentUser!.uid)
+      //       .set(userModel.toMap(_auth.currentUser!.uid));
+      // } else if (!userResult.additionalUserInfo!.isNewUser &&
+      //     type == 'signin') {
+      //   print('type $type');
+      //   showWarningToast(msg: 'Account already exists.');
+      // }
       if (context.mounted) {
         context.pushReplacementNamed(UpstoxLogin.routeName);
       }

@@ -72,8 +72,6 @@ final route = GoRouter(
               final args = state.extra as Map<String, dynamic>;
               return OtpVerificationPage(
                 verificationId: args['verificationId'],
-                userModel: args['userModel'],
-                type: args['type'],
               );
             },
           ),

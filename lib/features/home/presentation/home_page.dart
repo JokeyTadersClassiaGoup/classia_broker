@@ -120,17 +120,20 @@ class _HomePageState extends State<HomePage> {
               // ],
             ),
           ),
-          body: SingleChildScrollView(
-            controller: scrollController,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  if (state is HomePageLoadingState) const Loader(),
-                  if (state is HomePageLoadedState)
-                    state.instruments.isEmpty
-                        ? commonText('No Instruments selected')
-                        : ListView.builder(
+          body: state is HomePageLoadedState && state.instruments.isEmpty
+              ? commonText('No Instruments selected')
+              : SingleChildScrollView(
+                  controller: scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        if (state is HomePageLoadingState) const Loader(),
+                        if (state is HomePageLoadedState)
+                          //   state.instruments.isEmpty
+                          //       ? commonText('No Instruments selected')
+                          //       :
+                          ListView.builder(
                             controller: scrollController,
                             itemCount: state.instruments.length,
                             shrinkWrap: true,
@@ -263,12 +266,12 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                           ),
-                  if (state is HomePageErrorState)
-                    Expanded(child: commonText(state.message)),
-                ],
-              ),
-            ),
-          ),
+                        if (state is HomePageErrorState)
+                          Expanded(child: commonText(state.message)),
+                      ],
+                    ),
+                  ),
+                ),
           bottomNavigationBar: state is HomePageLoadedState
               ? ValueListenableBuilder(
                   valueListenable: totalValue,

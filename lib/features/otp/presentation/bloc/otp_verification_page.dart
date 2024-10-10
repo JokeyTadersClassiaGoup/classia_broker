@@ -4,44 +4,19 @@ import 'package:gap/gap.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../core/use_case/use_case.dart';
-import '../../../auth/domain/models/user_model.dart';
 import '../../../auth/domain/repository/auth_repository.dart';
 import '../../../auth/domain/usecases/verify_otp.dart';
 import 'otp_page_cubit.dart';
 import 'otp_page_cubit_state.dart';
 
-// class OtpVerificationPageProvider extends StatelessWidget {
-//   static const routeName = '/otp-verification-page';
-
-//   final String verificationId;
-
-//   const OtpVerificationPageProvider({super.key, required this.verificationId});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => OtpPageCubit(
-//         verifyOtp: VerifyOtp(
-//           firebaseRemoteDataSourceInterface: RepositoryProvider.of(context),
-//         ),
-//       ),
-//       child: OtpVerificationPage(
-//         verificationId: verificationId,
-//       ),
-//     );
-//   }
-// }
-
 class OtpVerificationPage extends StatelessWidget {
   static const routeName = 'otp-verification-page';
   final String verificationId;
-  final UserModel? userModel;
-  final String type;
+  // final String type;
   OtpVerificationPage({
     super.key,
     required this.verificationId,
-    this.userModel,
-    required this.type,
+    // required this.type,
   });
 
   ValueNotifier<bool> isLoading = ValueNotifier(false);
@@ -96,11 +71,10 @@ class OtpVerificationPage extends StatelessWidget {
                       isLoading.value = true;
                       await ct.read<OtpPageCubit>().verifySmsCode(
                             VerifyOtpParams(
-                              userModel: userModel,
                               smsCode: val,
                               context: context,
                               verificationId: verificationId,
-                              type: type,
+                              // type: type,
                             ),
                           );
                       isLoading.value = false;

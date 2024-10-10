@@ -13,10 +13,10 @@ abstract interface class AuthRepository {
 
   Future<Either<Failures, bool>> verifyOtp({
     required String smsCode,
-    UserModel? userModel,
+    // UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    required String type,
+    // required String type,
   });
 
   Future<Either<Failures, UserModel>> getUser(String id);

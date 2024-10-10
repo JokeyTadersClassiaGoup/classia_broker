@@ -3,7 +3,6 @@ import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/auth/domain/models/user_model.dart';
 import '../../features/order/1_domian/entity/order.dart';
 import '../error/failures.dart';
 
@@ -47,21 +46,21 @@ class SignUpParams extends Params {
 
 class VerifyOtpParams extends Params {
   final String smsCode;
-  final UserModel? userModel;
+  // final UserModel? userModel;
   final BuildContext context;
   final String verificationId;
-  final String type;
+  // final String type;
 
   VerifyOtpParams({
     required this.smsCode,
-    this.userModel,
+    // this.userModel,
     required this.context,
     required this.verificationId,
-    required this.type,
+    // required this.type,
   });
 
   @override
-  List<Object?> get props => [smsCode, userModel, context, verificationId];
+  List<Object?> get props => [smsCode, context, verificationId];
 }
 
 class PlaceOrderParams extends Params {

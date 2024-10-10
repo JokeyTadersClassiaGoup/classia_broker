@@ -36,15 +36,15 @@ class AuthRepositoryImpl implements AuthRepository {
     UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    required String type,
+    // required String type,
   }) async {
     try {
       final response = await remoteDataSourceInterface.verifyOtp(
         smsCode: smsCode,
-        userModel: userModel,
+        // userModel: userModel,
         context: context,
         verificationId: verificationId,
-        type: type,
+        // type: type,
       );
 
       return Right(response);
