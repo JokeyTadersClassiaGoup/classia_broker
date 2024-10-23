@@ -46,6 +46,10 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
   ]
   ''';
 
+//{"segment":"BSE_EQ","name":"Zomato Limited","exchange":"BSE","isin":"INE758T01015","instrument_type":"A","instrument_key":"BSE_EQ|INE758T01015","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"543320","tick_size":5.0,"trading_symbol":"ZOMATO","short_name":"Zomato"},
+
+//{"token":"543320","symbol":"ZOMATO","name":"ZOMATO","expiry":"","strike":"-1.000000","lotsize":"1","instrumenttype":"","exch_seg":"BSE","tick_size":"5.000000"}
+
   List<Ltp> instruments = [];
 
   @override

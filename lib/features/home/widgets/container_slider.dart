@@ -36,10 +36,12 @@ class _ContainerSliderState extends State<ContainerSlider> {
 
   double? performance;
   var liveValue = 0;
+  // Timer? timer2;
 
   Future<void> calculateWidth() async {
     var function =
         GetSelectedInstrumentsLtp(repository: RepositoryProvider.of(context));
+    print('at ${widget.accessToken}');
     var response = await function.call(widget.accessToken);
     if (response.isRight) {
       liveValue = response.right;
@@ -48,41 +50,28 @@ class _ContainerSliderState extends State<ContainerSlider> {
     }
 
     var subValue = liveValue - widget.lotValue;
-    print('sub val $subValue');
     performance = subValue * 100 / widget.lotValue;
-    print('pr $performance');
 
     double minWidth = 0;
     double maxWidth = context.mounted ? MediaQuery.of(context).size.width : 0.0;
     var highValue = widget.lotValue * 2;
     statusColor = performance! < 0 ? Colors.red : Colors.green;
     symbol = performance! < 0 ? '-' : '+';
-    currentWidth =
-        minWidth + (liveValue - 0) / (highValue - 0) * (maxWidth - minWidth);
+    // currentWidth =
+    //     minWidth + (liveValue - 0) / (highValue - 0) * (maxWidth - minWidth);
+    currentWidth = performance! * 10;
     // print('cw $currentWidth');
     setState(() {});
   }
 
-  // Future getLiveInstrumentsDataAndCalculateValue(
-  //     dynamic lotValue, String accessToken, ReadPortfolio readPortfolio) async {
+  // Future<void> auther() async {
   //   try {
-  //     print('lot size $lotValue');
-  //     liveValue = await getHttpLiveData(readPortfolio);
-  //     // print('current price ${currentPrice.value}');
-  //     var subValue = liveValue - lotValue;
-  //     performance = subValue * 100 / lotValue;
-  //     double minWidth = 0;
-  //     double maxWidth = MediaQuery.of(context).size.width;
-  //     var highValue = lotValue * 10;
-  //     statusColor = performance! < 0 ? Colors.red : Colors.green;
-  //     print(
-  //         'highvalue $highValue, livevalue $liveValue lot valu $lotValue subValue $subValue performance $performance');
-  //     currentWidth =
-  //         minWidth + (liveValue - 0) / (highValue - 0) * (maxWidth - minWidth);
-  //     print('currentWidth $currentWidth');
-  //     setState(() {});
+  //     final url = Uri.parse(
+  //         'https://api.upstox.com/v2/feed/market-data-feed/authorize');
+
+  //         final response = await http.ge
   //   } catch (e) {
-  //     return 0.0;
+  //     print('auth err ${e.toString()}');
   //   }
   // }
 
@@ -92,6 +81,9 @@ class _ContainerSliderState extends State<ContainerSlider> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (isInit && context.mounted) {
+      // timer2 = Timer.periodic(Duration(seconds: 2), (v) async {
+      //   await getLiveData();
+      // });
       timer = Timer.periodic(const Duration(seconds: 4), (v) async {
         await calculateWidth();
       });
@@ -101,6 +93,7 @@ class _ContainerSliderState extends State<ContainerSlider> {
   @override
   void dispose() {
     super.dispose();
+    // timer2!.cancel();
     timer.cancel();
     currentPrice.dispose();
   }

@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
   ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    print('accessToken ${widget.accessToken}');
     return BlocBuilder<HomePageCubit, HomeCubitState>(
       builder: (_, state) {
         final cubit = context.read<HomePageCubit>();
@@ -98,17 +99,18 @@ class _HomePageState extends State<HomePage> {
             preferredSize: const Size.fromHeight(60),
             child: AppBar(
               title: ValueListenableBuilder(
-                  valueListenable: isActivate,
-                  builder: (_, val, child) {
-                    return CompanySearchBar(
-                      cubitContext: context,
-                      totalValFun: (val) {
-                        totalValue.value = val;
-                      },
-                      accessToken: widget.accessToken,
-                      isActivate: isActivate.value,
-                    );
-                  }),
+                valueListenable: isActivate,
+                builder: (_, val, child) {
+                  return CompanySearchBar(
+                    cubitContext: context,
+                    totalValFun: (val) {
+                      totalValue.value = val;
+                    },
+                    accessToken: widget.accessToken,
+                    isActivate: isActivate.value,
+                  );
+                },
+              ),
               // actions: [
               //   IconButton(
               //       onPressed: () async {
@@ -130,9 +132,6 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         if (state is HomePageLoadingState) const Loader(),
                         if (state is HomePageLoadedState)
-                          //   state.instruments.isEmpty
-                          //       ? commonText('No Instruments selected')
-                          //       :
                           ListView.builder(
                             controller: scrollController,
                             itemCount: state.instruments.length,

@@ -13,9 +13,7 @@ import '../../../../core/utils/show_warning_toast.dart';
 
 abstract class HomeRemoteDatasourceInterface {
   Future<Either<Failures, int>> getSelectedInstrumentsLtp(
-    List<Ltp> instruments,
-    String accessToken,
-  );
+      List<Ltp> instruments, String accessToken);
   Future<bool> activateBroker({required BrokerModel brokerModel});
 
   Future<bool> stopBroker({required String brokerUid});
@@ -25,7 +23,7 @@ abstract class HomeRemoteDatasourceInterface {
   // Future<bool> checkBrokerStatus(String uid);
 }
 
-class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
+class HomeDataSourceImpl extends HomeRemoteDatasourceInterface {
   @override
   Future<Either<Failures, int>> getSelectedInstrumentsLtp(
       List<Ltp> instruments, String accessToken) async {
@@ -142,17 +140,4 @@ class HomeDatasourceImpl extends HomeRemoteDatasourceInterface {
       rethrow;
     }
   }
-
-  // @override
-  // Future<bool> checkBrokerStatus(String uid) async {
-  //   try {
-  //     final docSnapshot = await FirebaseFirestore.instance
-  //         .collection('Active-Jokies')
-  //         .doc(uid)
-  //         .get();
-  //     return docSnapshot.exists;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
 }

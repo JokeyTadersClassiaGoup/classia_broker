@@ -35,7 +35,7 @@ void main() async {
       ),
       RepositoryProvider<HomeRepository>(
         create: (context) =>
-            HomeRepositoryImpl(remoteDataSourceInterface: HomeDatasourceImpl()),
+            HomeRepositoryImpl(remoteDataSourceInterface: HomeDataSourceImpl()),
       ),
       RepositoryProvider<OrderRepository>(
         create: (context) =>
