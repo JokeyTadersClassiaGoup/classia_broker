@@ -1,8 +1,9 @@
-import 'package:classia_broker/features/home/domain/model/broker_model.dart';
+import 'package:classia_broker/features/home/domain/model/activity_model.dart';
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../features/auth/domain/models/user_model.dart';
 import '../../features/order/1_domian/entity/order.dart';
 import '../error/failures.dart';
 
@@ -46,17 +47,17 @@ class SignUpParams extends Params {
 
 class VerifyOtpParams extends Params {
   final String smsCode;
-  // final UserModel? userModel;
+  final UserModel? userModel;
   final BuildContext context;
   final String verificationId;
-  // final String type;
+  final String type;
 
   VerifyOtpParams({
     required this.smsCode,
-    // this.userModel,
+    this.userModel,
     required this.context,
     required this.verificationId,
-    // required this.type,
+    required this.type,
   });
 
   @override
@@ -73,12 +74,12 @@ class PlaceOrderParams extends Params {
 }
 
 class ActivateBrokerParams extends Params {
-  final BrokerModel brokerModel;
+  final ActivityModel activityModel;
 
-  ActivateBrokerParams({required this.brokerModel});
+  ActivateBrokerParams({required this.activityModel});
 
   @override
-  List<Object?> get props => [brokerModel];
+  List<Object?> get props => [activityModel];
 }
 
 class GetBrokerIdParams extends Params {

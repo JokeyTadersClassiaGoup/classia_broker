@@ -19,15 +19,17 @@ class _PrimaryLoadingButtonState extends State<PrimaryLoadingButton> {
       _isLoading = true;
     });
     await widget.onPressed().then((val) {
-      if (context.mounted) {
+      if (mounted) {
         setState(() {
           _isLoading = false;
         });
       }
     }).catchError((er) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 

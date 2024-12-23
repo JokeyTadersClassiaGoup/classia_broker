@@ -178,14 +178,8 @@ class _OrderPageState extends State<OrderPage> {
               ],
             ),
             const Gap(10),
-
-            // const Gap(30),
-            // Divider(),
             const Spacer(),
-            const Divider(
-              indent: 10,
-              endIndent: 10,
-            ),
+            const Divider(indent: 10, endIndent: 10),
             ValueListenableBuilder(
               valueListenable: totalValue,
               builder: (context, _, child) {

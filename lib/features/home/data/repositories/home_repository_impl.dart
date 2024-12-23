@@ -1,6 +1,6 @@
 import 'package:classia_broker/core/error/failures.dart';
 import 'package:classia_broker/features/home/data/datasource/home_datasource.dart';
-import 'package:classia_broker/features/home/domain/model/broker_model.dart';
+import 'package:classia_broker/features/home/domain/model/activity_model.dart';
 import 'package:classia_broker/features/home/domain/repository/home_repository.dart';
 import 'package:either_dart/src/either.dart';
 
@@ -51,21 +51,11 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<Either<Failures, bool>> activateBroker(BrokerModel brokerModel) async {
-    try {
-      final response = await remoteDataSourceInterface.activateBroker(
-          brokerModel: brokerModel);
-      return Right(response);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failures, bool>> stopBroker(String brokerUid) async {
+  Future<Either<Failures, bool>> activateBroker(
+      ActivityModel activityModel) async {
     try {
       final response =
-          await remoteDataSourceInterface.stopBroker(brokerUid: brokerUid);
+          await remoteDataSourceInterface.activateBroker(activityModel);
       return Right(response);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -73,7 +63,18 @@ class HomeRepositoryImpl extends HomeRepository {
   }
 
   @override
-  Future<Either<Failures, BrokerModel?>> getBrokerById(
+  Future<Either<Failures, bool>> stopBroker(ActivityModel activityModel) async {
+    try {
+      final response =
+          await remoteDataSourceInterface.stopBroker(activityModel);
+      return Right(response);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, ActivityModel?>> getBrokerById(
       String uid, String accessToken) async {
     try {
       final response =

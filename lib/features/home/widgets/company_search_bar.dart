@@ -34,7 +34,6 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
     {"segment":"BSE_EQ","name":"NILKAMAL LTD.","exchange":"BSE","isin":"INE310A01015","instrument_type":"B","instrument_key":"BSE_EQ|INE310A01015","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"523385","tick_size":5.0,"trading_symbol":"NILKAMAL","short_name":"NILKAMAL"},
     {"segment":"BSE_EQ","name":"HINDUSTAN ZINC LTD.","exchange":"BSE","isin":"INE267A01025","instrument_type":"A","instrument_key":"BSE_EQ|INE267A01025","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"500188","tick_size":5.0,"trading_symbol":"HINDZINC","short_name":"HINDUSTAN ZINC"},
     {"segment":"BSE_EQ","name":"TATA STEEL LTD.","exchange":"BSE","isin":"INE081A01020","instrument_type":"A","instrument_key":"BSE_EQ|INE081A01020","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"500470","tick_size":5.0,"trading_symbol":"TATASTEEL","short_name":"TATA STEEL"},    
-    {"segment":"BSE_EQ","name":"Indian Railway Finance Corpora","exchange":"BSE","isin":"INE053F01010","instrument_type":"A","instrument_key":"BSE_EQ|INE053F01010","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"543257","tick_size":5.0,"trading_symbol":"IRFC","short_name":"INDIAN RAILWAY FINANCIAL CORPORATION"},
     {"segment":"BSE_EQ","name":"Zomato Limited","exchange":"BSE","isin":"INE758T01015","instrument_type":"A","instrument_key":"BSE_EQ|INE758T01015","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"543320","tick_size":5.0,"trading_symbol":"ZOMATO","short_name":"Zomato"},
     {"segment":"NSE_EQ","name":"JSW STEEL LIMITED","exchange":"NSE","isin":"INE019A01038","instrument_type":"EQ","instrument_key":"NSE_EQ|INE019A01038","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"11723","tick_size":5.0,"trading_symbol":"JSWSTEEL","short_name":"JSW Steel","security_type":"NORMAL"},
     {"segment":"BSE_EQ","name":"POWER FINANCE CORPORATION LTD.","exchange":"BSE","isin":"INE134E01011","instrument_type":"A","instrument_key":"BSE_EQ|INE134E01011","lot_size":1,"freeze_quantity":100000.0,"exchange_token":"532810","tick_size":5.0,"trading_symbol":"PFC","short_name":"POWER FINANCE CORP"},
@@ -121,6 +120,7 @@ class _CompanySearchBarState extends State<CompanySearchBar> {
                   borderSide: BorderSide(color: Colors.white70)),
             ),
           ),
+          // onSelected: (city) {},
           suggestionsBoxDecoration: SuggestionsBoxDecoration(
             color: AppColors.primaryColor,
             borderRadius: BorderRadius.circular(10.0),

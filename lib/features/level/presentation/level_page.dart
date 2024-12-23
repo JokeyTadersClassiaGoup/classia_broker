@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:classia_broker/core/utils/collection_name.dart';
 import 'package:classia_broker/features/level/presentation/upcoming_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,15 +48,15 @@ class _LevelPageState extends State<LevelPage> {
     print('uid $userId');
     try {
       final docSnapshot = await FirebaseFirestore.instance
-          .collection('Broker')
+          .collection(brokersCollectionName)
           .doc(userId)
           .get();
 
       if (docSnapshot.exists) {
         var upcoming = await FirebaseFirestore.instance
-            .collection('Broker')
+            .collection(brokersCollectionName)
             .doc(userId)
-            .collection('upcoming-prediction')
+            .collection(upcomingPredictionCollectionName)
             .get();
         pastPerformance =
             upcoming.docs.map((doc) => Prediction.fromMap(doc.data())).toList();
@@ -114,8 +115,8 @@ class _LevelPageState extends State<LevelPage> {
         title: const Text('Level'),
         actions: [
           IconButton(
-              onPressed: () {
-                isUserAvailable();
+              onPressed: () async {
+                await isUserAvailable();
               },
               icon: Icon(Icons.refresh))
         ],

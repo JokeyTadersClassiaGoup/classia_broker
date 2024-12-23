@@ -36,19 +36,19 @@ class _SignUpPageState extends State<SignUpPage> {
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordNode = FocusNode();
 
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    phoneNumberController.dispose();
-    fullNameController.dispose();
-    passwordController.dispose();
-    isOtpLoading.dispose();
-    fullNameNode.dispose();
-    // passwordNode.dispose();
-    phoneNumberNode.dispose();
-    emailFocusNode.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   emailController.dispose();
+  //   phoneNumberController.dispose();
+  //   fullNameController.dispose();
+  //   passwordController.dispose();
+  //   isOtpLoading.dispose();
+  //   fullNameNode.dispose();
+  //   // passwordNode.dispose();
+  //   phoneNumberNode.dispose();
+  //   emailFocusNode.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

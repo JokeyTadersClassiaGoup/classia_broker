@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/common/widgets/company_logo.dart';
 import '../../../../core/common/widgets/loader.dart';
@@ -12,6 +13,7 @@ import '../../domain/repository/auth_repository.dart';
 import '../../domain/usecases/sign_up.dart';
 import 'bloc/auth_cubit.dart';
 import 'bloc/auth_cubit_state.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/login-page';
@@ -111,35 +113,35 @@ class _LoginPageState extends State<LoginPage> {
                 Gap(
                   heightScreen * 0.020,
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const Text(
-                //       "Don't have an account?",
-                //       style: TextStyle(
-                //           // fontSize: 13,
-                //           fontWeight: FontWeight.w600,
-                //           color: Colors.grey),
-                //     ),
-                //     TextButton(
-                //       style: TextButton.styleFrom(
-                //         padding: const EdgeInsets.symmetric(
-                //           horizontal: 7,
-                //         ),
-                //       ),
-                //       onPressed: () {
-                //         context.pushNamed(SignUpPage.routeName);
-                //       },
-                //       child: const Text(
-                //         "Create Account",
-                //         style: TextStyle(
-                //             color: Color(0xffFFDAB9),
-                //             // fontSize: 13,
-                //             fontWeight: FontWeight.w600),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Don't have an account?",
+                      style: TextStyle(
+                          // fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 7,
+                        ),
+                      ),
+                      onPressed: () {
+                        context.pushNamed(SignUpPage.routeName);
+                      },
+                      child: const Text(
+                        "Create Account",
+                        style: TextStyle(
+                            color: Color(0xffFFDAB9),
+                            // fontSize: 13,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
 
                 // SizedBox(
                 //   height: heightScreen * 0.1,

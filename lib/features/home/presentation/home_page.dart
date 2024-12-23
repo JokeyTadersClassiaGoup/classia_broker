@@ -1,6 +1,6 @@
 import 'package:classia_broker/core/common/widgets/common_text.dart';
 import 'package:classia_broker/core/common/widgets/loader.dart';
-import 'package:classia_broker/features/home/domain/model/broker_model.dart';
+import 'package:classia_broker/features/home/domain/model/activity_model.dart';
 import 'package:classia_broker/features/home/presentation/bloc/home_cubit.dart';
 import 'package:classia_broker/features/home/presentation/bloc/home_cubit_state.dart';
 import 'package:classia_broker/features/home/widgets/bottom_widget.dart';
@@ -58,20 +58,19 @@ class _HomePageState extends State<HomePage> {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   var isInit = true;
-  BrokerModel? brokerModel;
+  ActivityModel? activityModel;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
 
-    if (isInit == true && brokerModel == null) {
-      print(brokerModel);
-      brokerModel =
+    if (isInit == true && activityModel == null) {
+      activityModel =
           await context.read<HomePageCubit>().getBroker(widget.accessToken);
       context.read<HomePageCubit>().getInst();
 
-      if (brokerModel != null) {
-        totalValue.value = brokerModel!.lotValue;
+      if (activityModel != null) {
+        totalValue.value = activityModel!.lotValue;
         isActivate.value = true;
       }
     }
@@ -111,15 +110,15 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              // actions: [
-              //   IconButton(
-              //       onPressed: () async {
-              //         await context
-              //             .read<HomePageCubit>()
-              //             .getBroker(widget.accessToken);
-              //       },
-              //       icon: Icon(Icons.refresh))
-              // ],
+              actions: [
+                IconButton(
+                    onPressed: () async {
+                      await context
+                          .read<HomePageCubit>()
+                          .getBroker(widget.accessToken);
+                    },
+                    icon: Icon(Icons.refresh))
+              ],
             ),
           ),
           body: state is HomePageLoadedState && state.instruments.isEmpty
@@ -285,7 +284,11 @@ class _HomePageState extends State<HomePage> {
                           cubit: state,
                           accessToken: widget.accessToken,
                           instruments: state.instruments,
-                          activate: (val) {
+                          activityModel: activityModel,
+                          activate: (val) async {
+                            activityModel = await context
+                                .read<HomePageCubit>()
+                                .getBroker(widget.accessToken);
                             isActivate.value = val;
                           },
                         );

@@ -24,3 +24,16 @@ class PredictionId extends UniqueId {
     return PredictionId._(value: uniqueString);
   }
 }
+
+class ActivityId extends UniqueId {
+  @override
+  final String value;
+
+  ActivityId._({required this.value}) : super._(value);
+
+  factory ActivityId() => ActivityId._(value: Uuid().v4());
+
+  factory ActivityId.fromUniqueString(String uniqueString) {
+    return ActivityId._(value: uniqueString);
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:classia_broker/core/utils/collection_name.dart';
 import 'package:classia_broker/core/utils/show_warning_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equal_space/equal_space.dart';
@@ -47,9 +48,9 @@ class _UploadPredictionPageState extends State<UploadPredictionPage> {
 
     try {
       final response = await FirebaseFirestore.instance
-          .collection('Broker')
+          .collection(brokersCollectionName)
           .doc(prediction.jokeyUid)
-          .collection('upcoming-prediction')
+          .collection(upcomingPredictionCollectionName)
           .doc(prediction.predictionId)
           .set(prediction.toMap())
           .then((val) => true);

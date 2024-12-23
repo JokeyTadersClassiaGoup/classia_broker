@@ -1,7 +1,9 @@
 import 'package:classia_broker/core/common/entity/ltp.dart';
-import 'package:classia_broker/features/home/domain/model/broker_model.dart';
+import 'package:classia_broker/core/common/entity/unique_id.dart';
+import 'package:classia_broker/features/home/domain/model/activity_model.dart';
 import 'package:classia_broker/features/home/presentation/bloc/home_cubit.dart';
 import 'package:classia_broker/features/home/presentation/bloc/home_cubit_state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +24,7 @@ class BottomWidget extends StatefulWidget {
     required this.accessToken,
     required this.instruments,
     required this.activate,
+    this.activityModel,
   });
 
   final ValueNotifier<int> totalValue;
@@ -30,6 +33,7 @@ class BottomWidget extends StatefulWidget {
   final String accessToken;
   final List<Ltp> instruments;
   final Function(bool) activate;
+  final ActivityModel? activityModel;
 
   @override
   State<BottomWidget> createState() => _BottomWidgetState();
@@ -43,12 +47,29 @@ class _BottomWidgetState extends State<BottomWidget> {
 
   var statusColor = AppColors.goldColor;
 
+  ActivityModel? updatedStopModel() {
+    if (widget.activityModel != null) {
+      var endValue = 10; // live value
+      var stopTime = Timestamp.now();
+      var initialValue = widget.activityModel!.lotValue;
+      var profit = initialValue - endValue;
+      var closingBalance = widget.activityModel!.openingBalance +
+          10; //fetch wallet to get current balance -- current balance = closing balance whatever the value
+
+      return widget.activityModel!.copyWith(
+        profit: double.parse(profit.toString()),
+        closeTime: stopTime,
+        closingBalance: closingBalance,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const radius = 30.0;
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
+      children: <Widget>[
         widget.isActivate
             ? ValueListenableBuilder(
                 valueListenable: isUpside,
@@ -88,7 +109,8 @@ class _BottomWidgetState extends State<BottomWidget> {
                       )
                     ],
                   );
-                })
+                },
+              )
             : const SizedBox(),
         Container(
           color: AppColors.primaryColor,
@@ -128,22 +150,30 @@ class _BottomWidgetState extends State<BottomWidget> {
                                       ? await context
                                           .read<HomePageCubit>()
                                           .activate(
-                                            BrokerModel(
-                                              jockeyUid: auth.currentUser!.uid,
-                                              jockeyName: 'User-1',
+                                            ActivityModel(
+                                              brokerUid: auth.currentUser!.uid,
+                                              brokerName: 'User-1',
                                               lotValue: widget.totalValue.value
                                                   .floor(),
                                               lots: widget.instruments,
-                                              dateTime: DateTime.now(),
+                                              dateTime: Timestamp.now(),
                                               // growth: 0.0,
                                               at: widget.accessToken,
-                                              // predictionValue: double.parse(predictionTextController.text),
-                                              // successRation: 0.0,
+                                              activityId: ActivityId().value,
+                                              profit: 0,
+                                              totalInvest: 0,
+                                              totalWithdraw: 0,
+                                              activeTime: Timestamp.now(),
+                                              closeTime: Timestamp.now(),
+                                              openingBalance: 1000.0,
+                                              closingBalance: 1050.0,
+                                              activityStatus: 'All Good',
                                             ),
                                           )
                                       : await context
                                           .read<HomePageCubit>()
-                                          .stop(auth.currentUser!.uid);
+                                          .stop(updatedStopModel()!);
+                                  // setState(() {});
 
                                   isLoading.value = false;
                                 } catch (e) {
@@ -154,7 +184,7 @@ class _BottomWidgetState extends State<BottomWidget> {
                                 setState(() {});
                               } else {
                                 showWarningToast(
-                                    msg: 'Select atleast 1 instrument');
+                                    msg: 'Select at least 1 instrument');
                               }
                             },
                             child: widget.isActivate

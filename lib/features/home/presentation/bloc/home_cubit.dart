@@ -1,6 +1,6 @@
 import 'package:classia_broker/core/use_case/use_case.dart';
 import 'package:classia_broker/core/utils/show_warning_toast.dart';
-import 'package:classia_broker/features/home/domain/model/broker_model.dart';
+import 'package:classia_broker/features/home/domain/model/activity_model.dart';
 import 'package:classia_broker/features/home/domain/repository/home_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,24 +72,24 @@ class HomePageCubit extends Cubit<HomeCubitState> {
     }
   }
 
-  Future<void> activate(BrokerModel brokerModel) async {
+  Future<void> activate(ActivityModel brokerModel) async {
     final response = await activateBroker
-        .call(ActivateBrokerParams(brokerModel: brokerModel));
+        .call(ActivateBrokerParams(activityModel: brokerModel));
 
     if (response.isLeft) {
       showWarningToast(msg: response.left.message);
     }
   }
 
-  Future<void> stop(String brokerUid) async {
-    final response = await stopBroker.call(brokerUid);
+  Future<void> stop(ActivityModel activityModel) async {
+    final response = await stopBroker.call(activityModel);
 
     if (response.isLeft) {
       showWarningToast(msg: response.left.message);
     }
   }
 
-  Future<BrokerModel?> getBroker(String accessToken) async {
+  Future<ActivityModel?> getBroker(String accessToken) async {
     final uId = FirebaseAuth.instance.currentUser!.uid;
 
     final response = await getBrokerById

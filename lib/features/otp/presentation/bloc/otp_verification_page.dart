@@ -1,3 +1,4 @@
+import 'package:classia_broker/features/auth/domain/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -12,11 +13,13 @@ import 'otp_page_cubit_state.dart';
 class OtpVerificationPage extends StatelessWidget {
   static const routeName = 'otp-verification-page';
   final String verificationId;
-  // final String type;
+  final String type;
+  final UserModel userModel;
   OtpVerificationPage({
     super.key,
     required this.verificationId,
-    // required this.type,
+    required this.type,
+    required this.userModel,
   });
 
   ValueNotifier<bool> isLoading = ValueNotifier(false);
@@ -74,7 +77,8 @@ class OtpVerificationPage extends StatelessWidget {
                               smsCode: val,
                               context: context,
                               verificationId: verificationId,
-                              // type: type,
+                              type: type,
+                              userModel: userModel,
                             ),
                           );
                       isLoading.value = false;

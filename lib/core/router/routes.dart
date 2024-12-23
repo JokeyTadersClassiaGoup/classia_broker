@@ -8,6 +8,7 @@ import 'package:classia_broker/features/order/1_domian/entity/order_page_args.da
 import 'package:classia_broker/features/order/2_presentation/order_page.dart';
 import 'package:classia_broker/features/otp/presentation/bloc/otp_verification_page.dart';
 import 'package:classia_broker/features/profile/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,7 @@ import '../../features/bottom_nav_bar/bottom_nav_bar_page.dart';
 import '../../features/level/presentation/level_page.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _auth = FirebaseAuth.instance;
 
 final route = GoRouter(
     initialLocation: LoginPage.routeName,
@@ -72,6 +74,8 @@ final route = GoRouter(
               final args = state.extra as Map<String, dynamic>;
               return OtpVerificationPage(
                 verificationId: args['verificationId'],
+                type: args['type'],
+                userModel: args['userModel'],
               );
             },
           ),

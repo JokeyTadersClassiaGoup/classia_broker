@@ -61,6 +61,7 @@ dependencies:
   webview_flutter: ^4.8.0
   flutter_typeahead: ^4.8.0
   jumping_dot: ^0.0.7
+  flutter_keyboard_visibility: ^5.4.1
 
   
 dev_dependencies:

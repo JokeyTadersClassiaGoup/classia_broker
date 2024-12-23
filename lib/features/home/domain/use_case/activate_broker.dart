@@ -9,6 +9,6 @@ class ActivateBroker extends UseCase<bool, ActivateBrokerParams> {
   ActivateBroker({required this.homeRepository});
   @override
   Future<Either<Failures, bool>> call(ActivateBrokerParams params) async {
-    return await homeRepository.activateBroker(params.brokerModel);
+    return await homeRepository.activateBroker(params.activityModel);
   }
 }

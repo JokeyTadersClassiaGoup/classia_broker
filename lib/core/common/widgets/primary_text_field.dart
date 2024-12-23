@@ -36,7 +36,7 @@ class PrimaryTextField extends StatelessWidget {
         controller: controller,
         textCapitalization: TextCapitalization.words,
         focusNode: focusNode,
-        keyboardType: TextInputType.name,
+        keyboardType: keyboardType,
         onEditingComplete: () {
           FocusScope.of(context).requestFocus(nextFocusNode);
         },

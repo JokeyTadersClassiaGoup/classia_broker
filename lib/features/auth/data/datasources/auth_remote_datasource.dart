@@ -1,3 +1,4 @@
+import 'package:classia_broker/core/utils/collection_name.dart';
 import 'package:classia_broker/features/auth/presentation/pages/upstox_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,18 +21,20 @@ abstract class AuthRemoteDataSourceInterface {
 
   Future<bool> verifyOtp({
     required String smsCode,
-    // UserModel? userModel,
+    UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    // required String type,
+    required String type,
   });
 
   Future<UserModel> getUser(String id);
 
   Future<bool> editUser(UserModel userModel);
+
+  Future<bool> isUserBlocked(String phoneNumber);
 }
 
-var collectionName = 'brokers';
+// var collectionName = 'brokers';
 
 class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -44,40 +47,49 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   }) async {
     try {
       isOtpLoading.value = true;
-      await _auth.verifyPhoneNumber(
-        phoneNumber: '+91${params.phoneNumber}',
-        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
-          try {
-            await _auth.signInWithCredential(phoneAuthCredential);
-          } catch (e) {
-            print('auth error ${e.toString()}');
-          }
-        },
-        verificationFailed: (e) {
-          isOtpLoading.value = false;
-          print('verification error: ${e.code} - ${e.message}');
-          showWarningToast(msg: e.message!);
-        },
-        codeSent: (((verificationId, forceResendingToken) async {
-          // UserModel userModel = UserModel(
-          //   uId: '',
-          //   fullName: params.fullName ?? '',
-          //   email: params.email ?? '',
-          //   phoneNumber: params.phoneNumber,
-          // );
-          isOtpLoading.value = false;
+      if (await isUserBlocked(params.phoneNumber)) {
+        print('User blocked 00044500');
+        isOtpLoading.value = false;
+        showWarningToast(msg: 'User Blocked need to request for unblock');
+        return Future.error('User Blocked need to request for unblock');
+      } else {
+        await _auth.verifyPhoneNumber(
+          phoneNumber: '+91${params.phoneNumber}',
+          verificationCompleted:
+              (PhoneAuthCredential phoneAuthCredential) async {
+            try {
+              await _auth.signInWithCredential(phoneAuthCredential);
+            } catch (e) {
+              print('auth error ${e.toString()}');
+            }
+          },
+          verificationFailed: (e) {
+            isOtpLoading.value = false;
+            print('verification error: ${e.code} - ${e.message}');
+            showWarningToast(msg: e.message!);
+          },
+          codeSent: (((verificationId, forceResendingToken) async {
+            UserModel userModel = UserModel(
+              uId: '',
+              fullName: params.fullName ?? '',
+              email: params.email ?? '',
+              phoneNumber: params.phoneNumber,
+            );
+            isOtpLoading.value = false;
 
-          context.pushNamed(
-            OtpVerificationPage.routeName,
-            extra: {
-              'verificationId': verificationId,
-              'type': type,
-            },
-          );
-        })),
-        codeAutoRetrievalTimeout: ((verificationId) {}),
-      );
-      return true;
+            context.pushNamed(
+              OtpVerificationPage.routeName,
+              extra: {
+                'verificationId': verificationId,
+                'type': type,
+                'userModel': userModel
+              },
+            );
+          })),
+          codeAutoRetrievalTimeout: ((verificationId) {}),
+        );
+        return true;
+      }
     } catch (e) {
       isOtpLoading.value = false;
 
@@ -89,27 +101,29 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
   @override
   Future<bool> verifyOtp({
     required String smsCode,
-    // UserModel? userModel,
+    UserModel? userModel,
     required BuildContext context,
     required String verificationId,
-    // required String type,
+    required String type,
   }) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: smsCode,
       );
+
       UserCredential userResult = await _auth.signInWithCredential(credential);
-      // if (userModel != null && userResult.additionalUserInfo!.isNewUser) {
-      //   await FirebaseFirestore.instance
-      //       .collection(collectionName)
-      //       .doc(_auth.currentUser!.uid)
-      //       .set(userModel.toMap(_auth.currentUser!.uid));
-      // } else if (!userResult.additionalUserInfo!.isNewUser &&
-      //     type == 'signin') {
-      //   print('type $type');
-      //   showWarningToast(msg: 'Account already exists.');
-      // }
+      if (userModel != null && userResult.additionalUserInfo!.isNewUser) {
+        print('creating account 02');
+        await FirebaseFirestore.instance
+            .collection(brokersCollectionName)
+            .doc(_auth.currentUser!.uid)
+            .set(userModel.toMap(_auth.currentUser!.uid));
+      } else if (!userResult.additionalUserInfo!.isNewUser &&
+          type == 'signin') {
+        print('type $type');
+        showWarningToast(msg: 'Account already exists.');
+      }
       if (context.mounted) {
         context.pushReplacementNamed(UpstoxLogin.routeName);
       }
@@ -126,7 +140,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
     try {
       print('getting user $id');
       final docSnapshot = await FirebaseFirestore.instance
-          .collection(collectionName)
+          .collection(brokersCollectionName)
           .doc(id)
           .get();
       if (!docSnapshot.exists) {
@@ -146,7 +160,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
     print('values to update ${userModel.toMap(userModel.uId)}');
     try {
       final docSnapshot = await FirebaseFirestore.instance
-          .collection(collectionName)
+          .collection(brokersCollectionName)
           .doc(userModel.uId)
           .get();
 
@@ -154,7 +168,7 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
         return Future.error('User not available');
       } else {
         await FirebaseFirestore.instance
-            .collection(collectionName)
+            .collection(brokersCollectionName)
             .doc(userModel.uId)
             .update(userModel.toMap(_auth.currentUser!.uid));
         return true;
@@ -162,5 +176,15 @@ class AuthRemoteDatasource implements AuthRemoteDataSourceInterface {
     } on FirebaseException {
       rethrow;
     }
+  }
+
+  @override
+  Future<bool> isUserBlocked(String phoneNumber) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(blockedUsersCollectionName)
+        .where('phoneNumber', isEqualTo: phoneNumber)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
   }
 }
